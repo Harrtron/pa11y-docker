@@ -6,22 +6,22 @@ It uses a bash script to make it more flexible. You can pass things not possible
 
 ### Run testing against a set of URLs from a sitemap
 ```
-docker run -v $PWD/reports:/reports pa11y-docker --sitemap https://example.com/sitemap.xml/sitemap/Page/1
+docker run -v $PWD/reports:/reports harrtron/pa11y-docker --sitemap https://example.com/sitemap.xml/sitemap/Page/1
 ```
 
 ### Run testing against a set URL
 ```
-docker run -v $PWD/reports:/reports pa11y-docker --url https://example.com
+docker run -v $PWD/reports:/reports harrtron/pa11y-docker --url https://example.com
 ```
 
 ### Set custom reporter
 Currently we only support html and junit. This defaults to html.
 ```
-docker run -v $PWD/reports:/reports pa11y-docker --url https://example.com --reporter junit
+docker run -v $PWD/reports:/reports harrtron/pa11y-docker --url https://example.com --reporter junit
 ```
 
 ### Set custom pa11y configuration
 You need to mount a different config .json over the config using Docker
 ```
-docker run -v $PWD/pa11y.json:/pa11y-configs/pa11y.json -v $PWD/reports:/reports pa11y-docker --url https://example.com
+docker run -v $PWD/pa11y.json:/pa11y-configs/pa11y.json -v $PWD/reports:/reports harrtron/pa11y-docker --url https://example.com
 ```
