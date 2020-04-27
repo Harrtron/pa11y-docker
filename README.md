@@ -1,28 +1,27 @@
-# pa11y-docker
+# pa11y-docker image
 
-This image allows you to run pa11y in a container. 
+The purpose of this image is to run fully fledged pa11y in a container, outputting reports to /reports in the working directory. 
 
-It's main purpose was to allow flexibility of changing reporter and other parameters to the pa11y package.
+It uses a bash script to make it more flexible. You can pass things not possible with pa11y-ci, which was not up to the task of using custom reporters.
 
-## Usage
-### Single URL
+### Run testing against a set of URLs from a sitemap
 ```
-docker run harrtron/pa11y-docker --reporter html https://example.com
-```
-
-### Outputting results
-```
-docker run harrtron/pa11y-docker --reporter html https://example.com | tee example.html
+docker run -v $PWD/reports:/reports pa11y-docker --sitemap https://example.com/sitemap.xml/sitemap/Page/1
 ```
 
-### Looping through URLs (using a sitemap)
-In order to make use of custom reporters like junit, I have used the standard pa11y package. This means sitemaps cannot be passed currently. To get around this, I just loop the docker run through an array of sites.
+### Run testing against a set URL
 ```
-URLS=$(curl -s https://example.com/sitemap.xml/sitemap/Page/1 | grep "<loc>" | awk -F"<loc>" '{print $2} ' | awk -F"</loc>" '{print $1}')
-for url in ${URLS[@]}
-do
-    docker run harrtron/pa11y-docker --reporter html https://example.com | tee $url.html
-done
+docker run -v $PWD/reports:/reports pa11y-docker --url https://example.com
 ```
 
-Therefore this image should be useful in CI tools.
+### Set custom reporter
+Currently we only support html and junit. This defaults to html.
+```
+docker run -v $PWD/reports:/reports pa11y-docker --url https://example.com --reporter junit
+```
+
+### Set custom pa11y configuration
+You need to mount a different config .json over the config using Docker
+```
+docker run -v $PWD/pa11y.json:/pa11y-configs/pa11y.json -v $PWD/reports:/reports pa11y-docker --url https://example.com
+```
